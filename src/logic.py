@@ -64,6 +64,18 @@ class Logic(QMainWindow, Ui_MainWindow):
             self.current_channel = self.settings.settings_dict['current_channel']
             self.volume = self.settings.settings_dict['volume']
             self.slider_volume.setValue(self.volume)
+            '''
+            First use and throughout I did a Google search and AI mode results returned setting the pixmap attribute
+            setting for updating the images.
+            https://www.google.com/search?q=python+qt+designer+load+and+display+image&sca_esv=
+            69b583eab287adc9&sxsrf=AE3TifMAOnyzxmToBonGxjZrX7V14CepbA%3A1753847320117&ei=GJaJaKz5Bq-lptQPrJCMgQk&ved=
+            0ahUKEwis5YW01uOOAxWvkokEHSwII5AQ4dUDCBE&uact=5&oq=python+qt+designer+load+and+display+image&gs_lp=
+            Egxnd3Mtd2l6LXNlcnAiKXB5dGhvbiBxdCBkZXNpZ25lciBsb2FkIGFuZCBkaXNwbGF5IGltYWdlMgUQIRigATIFECEYoAEy
+            BRAhGKABMgUQIRirAjIFECEYqwIyBRAhGKsCMgUQIRifBUjfpQNQ2VNYrdUBcAV4AZABAJgBe6ABthaqAQQzMC40uAEDyAEA-
+            AEBmAInoALsF8ICChAAGLADGNYEGEfCAgoQABiABBhDGIoFwgILEAAYgAQYkQIYigXCAggQABiABBixA8ICBRAAGIAEwgIGEAAYF
+            hgewgILEAAYgAQYhgMYigXCAgUQABjvBcICCBAAGIAEGKIEwgIIEAAYogQYiQWYAwDiAwUSATEgQIgGAZAGCJIHBDMxLjigB9LaAb
+            IHBDI2Lji4B9kXwgcHMC4xMy4yNsgHhAE&sclient=gws-wiz-serp
+            '''
             pixmap = QtGui.QPixmap(self.settings.channel_dict[self.current_channel])
         self.label_image.setPixmap(pixmap)
 
@@ -86,6 +98,11 @@ class Logic(QMainWindow, Ui_MainWindow):
         """
         Volume control function to mute, increase, or decrease volume
         """
+        '''
+        Used the PyQT6 guide to find information for the set value of a slider although intuitive from
+        the type hinting.
+        https://www.riverbankcomputing.com/static/Docs/PyQt6/designer.html#using-the-generated-code
+        '''
         if self.power_state:
             if volume == -1:
                 self.volume = 0  # Sets to minimum volume allowed.

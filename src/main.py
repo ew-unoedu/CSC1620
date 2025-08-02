@@ -4,7 +4,9 @@
 from logic import *
 
 def main():
-    # Code from previous lab and lecture for PyQT.
+    '''
+    Code from previous lab and lecture for PyQT.
+    '''
     application = QApplication([])
     window = Logic()
     window.show()
