@@ -5,6 +5,9 @@ import csv
 import os.path
 
 class RemoteSettings:
+    """
+    Class to construct RemoteSettings objects.
+    """
     def __init__(self):
         # Declare and set initial variables.
         self.channel_dict: dict = {0: 'Binaries/off.jpg',
@@ -18,6 +21,10 @@ class RemoteSettings:
         self.settings_file: str = "settings.csv"
 
     def remote_settings_on(self) -> dict:
+        """
+        Function to read settings file to update settings_dict attribute from RemoteSettings class object.
+        """
+        # Checks if there is an existing settings file and assigns key values, if none, initial dict is used.
         if os.path.isfile(self.settings_file):
             with open(self.settings_file, 'r') as input_file:
                 csv_file = csv.reader(input_file, delimiter=',')
@@ -26,9 +33,13 @@ class RemoteSettings:
                                           'current_channel': int(row[1]),
                                           'volume': int(row[2])
                                           })
+
         return self.settings_dict
 
     def remote_settings_off(self, settings: list):
+        """
+        Function to write from a list of settings when the remote is powered off.
+        """
         with open(self.settings_file, 'w', newline='') as output_csv_file:
             csv_file = csv.writer(output_csv_file, delimiter=',')
             csv_file.writerow(settings)

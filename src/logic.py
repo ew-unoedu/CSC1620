@@ -8,6 +8,9 @@ from remote_settings import *
 
 class Logic(QMainWindow, Ui_MainWindow):
     def __init__(self):
+        """
+        Logic class to provide code logic for TV Remote operations.
+        """
         super().__init__()
         self.setupUi(self)
         self.setWindowTitle("TV Remote")
@@ -15,12 +18,13 @@ class Logic(QMainWindow, Ui_MainWindow):
 
         # Initial settings and states.
         self.settings: RemoteSettings = RemoteSettings()
-        self.power_state: bool = False  # True = power on and False = power off
+        self.power_state: bool = False  # True = power on and False = power off.
         self.current_input: int = 0
         self.current_channel: int = 0
         self.mute_state: bool = False
         self.volume: int = 0
 
+        # Remote control GUI button click events.
         self.button_power.clicked.connect(lambda: self.power())  # Power on/off toggle.
         self.button_input.clicked.connect(lambda: self.input(self.current_input))  # Input toggle.
 
@@ -43,11 +47,16 @@ class Logic(QMainWindow, Ui_MainWindow):
         self.button_chan9.clicked.connect(lambda: self.channel_select(9))
 
     def power(self):
+        """
+        Power control function to toggle on/off operations.
+        """
+        # Checks if remote power is on, changes to off and write settings.
         if self.power_state:
             self.power_state = False
             pixmap = QtGui.QPixmap(self.settings.channel_dict[0])
             self.settings.remote_settings_off([self.current_input, self.current_channel, self.volume])
         else:
+            # Changes state to on and loads settings for operation.
             self.power_state = True
             self.mute_state = False
             self.settings.remote_settings_on()
@@ -59,41 +68,54 @@ class Logic(QMainWindow, Ui_MainWindow):
         self.label_image.setPixmap(pixmap)
 
     def input(self, input_hdmi: int):
+        """
+        Input control function to toggle through HDMI inputs and TV input.
+        """
         if self.power_state:
+            # Sets offset for inout values after max input is reached.
             if input_hdmi == 12:
                 self.current_input = 9
                 pixmap = QtGui.QPixmap(self.settings.channel_dict[self.current_channel])
             else:
+                # Sets increased inout value and sets label_image.
                 self.current_input = input_hdmi + 1
                 pixmap = QtGui.QPixmap(self.settings.channel_dict[self.current_input])
             self.label_image.setPixmap(pixmap)
 
     def volume_select(self, volume: int):
+        """
+        Volume control function to mute, increase, or decrease volume
+        """
         if self.power_state:
             if volume == -1:
                 self.volume = 0  # Sets to minimum volume allowed.
             elif volume == 10:
                 self.volume = 9  # Sets to maximum volume allowed.
             elif volume == 99:
-                if self.mute_state:  # If muted volume unmutes else volume mutes
+                # If muted volume, volume unmutes to previous volume.  Else volume mutes.
+                if self.mute_state:
                     self.mute_state = False
                 else:
                     self.mute_state = True
                     self.slider_volume.setValue(volume - volume)
             else:
+                # Increases or decreases volume depending on input.
                 self.volume = volume
 
             if not self.mute_state:
                 self.slider_volume.setValue(self.volume)
 
     def channel_select(self, channel: int):
+        """
+        Channel control function to toggle through channels or direct select
+        """
         if self.power_state:
             if channel == 0:
-                self.current_channel = 9
+                self.current_channel = 9  # Wraps channel if lowest channel.
             elif channel == 10:
-                self.current_channel = 1
+                self.current_channel = 1  # Wraps channel if highest channel.
             else:
-                self.current_channel = channel
+                self.current_channel = channel  # Direct selection of channel.
 
             pixmap = QtGui.QPixmap(self.settings.channel_dict[self.current_channel])
             self.label_image.setPixmap(pixmap)
