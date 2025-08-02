@@ -18,7 +18,7 @@ class RemoteSettings:
         # Initial settings if no file exists
         self.settings_dict: dict = {'current_input': 11, 'current_channel': 1, 'volume': 0}
         # Settings file to retain last settings when powered off.
-        self.settings_file: str = "settings.csv"
+        self.settings_file: str = "Input_Output/settings.csv"
 
     def remote_settings_on(self) -> dict:
         """
