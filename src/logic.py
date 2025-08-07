@@ -23,15 +23,18 @@ class Logic(QMainWindow, Ui_MainWindow):
         self.current_input: int = 0
         self.current_channel: int = 0
         self.mute_state: bool = False
+        self.mute_volume: int = 0
         self.volume: int = 0
 
         # Remote control GUI button click events.
         self.button_power.clicked.connect(lambda: self.power())  # Power on/off toggle.
         self.button_input.clicked.connect(lambda: self.input(self.current_input + 1))  # Input toggle.
 
-        self.button_mute.clicked.connect(lambda: self.volume_select(99))  # Value used for mute condition.
-        self.button_volup.clicked.connect(lambda: self.volume_select(self.volume + 1))  # Increase volume.
-        self.button_voldown.clicked.connect(lambda: self.volume_select(self.volume - 1))  # Decrease volume.
+        self.button_mute.clicked.connect(lambda: self.volume_select(volume=99))  # Value used for mute condition.
+        self.button_volup.clicked.connect(lambda: self.volume_select(volume=(self.volume + 1)))  # Increase volume.
+        self.button_voldown.clicked.connect(lambda: self.volume_select(volume=(self.volume - 1)))  # Decrease volume.
+
+        self.slider_volume.sliderPressed.connect(lambda: self.volume_select(volume=self.slider_volume.value()))
 
         self.button_chanup.clicked.connect(lambda: self.channel_select(self.current_channel + 1))  # Next channel.
         self.button_chandown.clicked.connect(lambda: self.channel_select(self.current_channel - 1)) # Previous channel.
@@ -116,12 +119,17 @@ class Logic(QMainWindow, Ui_MainWindow):
                 # If muted volume, volume unmutes to previous volume.  Else volume mutes.
                 if self.mute_state:
                     self.mute_state = False
-                    self.slider_volume.setValue(self.volume)
+                    self.volume = self.mute_volume
+                    self.slider_volume.setValue(self.mute_volume)
                 else:
                     self.mute_state = True
+                    self.mute_volume = self.volume
                     self.slider_volume.setValue(volume - volume)
+            elif self.mute_state:
+                self.mute_state = False
+                self.volume = self.mute_volume + (volume - self.volume)
+                self.slider_volume.setValue(self.volume)
             else:
-                # Increases or decreases volume depending on input.
                 self.volume = volume
                 self.slider_volume.setValue(self.volume)
 
