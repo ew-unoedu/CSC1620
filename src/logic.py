@@ -15,6 +15,7 @@ class Logic(QMainWindow, Ui_MainWindow):
         self.setupUi(self)
         self.setWindowTitle("TV Remote")
         self.setFixedSize(440, 420)
+        self.frame.hide()
 
         # Initial settings and states.
         self.settings: RemoteSettings = RemoteSettings()
@@ -26,7 +27,7 @@ class Logic(QMainWindow, Ui_MainWindow):
 
         # Remote control GUI button click events.
         self.button_power.clicked.connect(lambda: self.power())  # Power on/off toggle.
-        self.button_input.clicked.connect(lambda: self.input(self.current_input))  # Input toggle.
+        self.button_input.clicked.connect(lambda: self.input(self.current_input + 1))  # Input toggle.
 
         self.button_mute.clicked.connect(lambda: self.volume_select(99))  # Value used for mute condition.
         self.button_volup.clicked.connect(lambda: self.volume_select(self.volume + 1))  # Increase volume.
@@ -46,6 +47,7 @@ class Logic(QMainWindow, Ui_MainWindow):
         self.button_chan8.clicked.connect(lambda: self.channel_select(8))
         self.button_chan9.clicked.connect(lambda: self.channel_select(9))
 
+        # self.slider_volume.moveEvent()
     def power(self):
         """
         Power control function to toggle on/off operations.
@@ -53,14 +55,16 @@ class Logic(QMainWindow, Ui_MainWindow):
         # Checks if remote power is on, changes to off and write settings.
         if self.power_state:
             self.power_state = False
+            self.frame.hide()
             pixmap = QtGui.QPixmap(self.settings.channel_dict[0])
             self.settings.remote_settings_off([self.current_input, self.current_channel, self.volume])
         else:
             # Changes state to on and loads settings for operation.
             self.power_state = True
+            self.frame.show()
             self.mute_state = False
             self.settings.remote_settings_on()
-            self.current_input = (self.settings.settings_dict['current_input'] - 1)
+            self.current_input = self.settings.settings_dict['current_input']
             self.current_channel = self.settings.settings_dict['current_channel']
             self.volume = self.settings.settings_dict['volume']
             self.slider_volume.setValue(self.volume)
@@ -85,13 +89,13 @@ class Logic(QMainWindow, Ui_MainWindow):
         """
         if self.power_state:
             # Sets offset for inout values after max input is reached.
-            if input_hdmi == 12:
-                self.current_input = 9
+            if input_hdmi == 4:
+                self.current_input = 0
                 pixmap = QtGui.QPixmap(self.settings.channel_dict[self.current_channel])
             else:
                 # Sets increased inout value and sets label_image.
-                self.current_input = input_hdmi + 1
-                pixmap = QtGui.QPixmap(self.settings.channel_dict[self.current_input])
+                self.current_input = input_hdmi
+                pixmap = QtGui.QPixmap(self.settings.input_dict[self.current_input])
             self.label_image.setPixmap(pixmap)
 
     def volume_select(self, volume: int):
@@ -112,14 +116,13 @@ class Logic(QMainWindow, Ui_MainWindow):
                 # If muted volume, volume unmutes to previous volume.  Else volume mutes.
                 if self.mute_state:
                     self.mute_state = False
+                    self.slider_volume.setValue(self.volume)
                 else:
                     self.mute_state = True
                     self.slider_volume.setValue(volume - volume)
             else:
                 # Increases or decreases volume depending on input.
                 self.volume = volume
-
-            if not self.mute_state:
                 self.slider_volume.setValue(self.volume)
 
     def channel_select(self, channel: int):

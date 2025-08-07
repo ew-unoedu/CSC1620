@@ -10,13 +10,13 @@ class RemoteSettings:
     """
     def __init__(self):
         # Declare and set initial variables.
+        self.input_dict: dict = {1: 'Binaries/hdmi1.jpg', 2: 'Binaries/hdmi2.jpg', 3: 'Binaries/hdmi3.jpg'}
         self.channel_dict: dict = {0: 'Binaries/off.jpg',
                                    1: 'Binaries/nbc.jpg', 2: 'Binaries/cbs.jpg', 3: 'Binaries/abc.jpg',
                                    4: 'Binaries/pbs.jpg', 5: 'Binaries/fox.jpg', 6: 'Binaries/weather.jpg',
-                                   7: 'Binaries/cnn.jpg', 8: 'Binaries/msnbc.jpg', 9: 'Binaries/scifi.jpg',
-                                   10: 'Binaries/hdmi1.jpg', 11: 'Binaries/hdmi2.jpg', 12: 'Binaries/hdmi3.jpg'}
+                                   7: 'Binaries/cnn.jpg', 8: 'Binaries/msnbc.jpg', 9: 'Binaries/scifi.jpg'}
         # Initial settings if no file exists
-        self.settings_dict: dict = {'current_input': 11, 'current_channel': 1, 'volume': 0}
+        self.settings_dict: dict = {'current_input': 0, 'current_channel': 1, 'volume': 0}
         # Settings file to retain last settings when powered off.
         self.settings_file: str = "Input_Output/settings.csv"
 
