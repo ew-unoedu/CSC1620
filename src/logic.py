@@ -91,14 +91,23 @@ class Logic(QMainWindow, Ui_MainWindow):
         Input control function to toggle through HDMI inputs and TV input.
         """
         if self.power_state:
-            # Sets offset for inout values after max input is reached.
+            # Sets offset for input values after max input is reached.
             if input_hdmi == 4:
                 self.current_input = 0
-                pixmap = QtGui.QPixmap(self.settings.channel_dict[self.current_channel])
+                # Exception handling in place if the key value does not exist in the dictionary.
+                try:
+                    pixmap = QtGui.QPixmap(self.settings.channel_dict[self.current_channel])
+                except KeyError:
+                    pixmap = QtGui.QPixmap(self.settings.input_dict[1])
             else:
-                # Sets increased inout value and sets label_image.
+                # Sets increased input value and sets label_image.
                 self.current_input = input_hdmi
-                pixmap = QtGui.QPixmap(self.settings.input_dict[self.current_input])
+                # Exception handling in place if the key value does not exist in the dictionary.
+                try:
+                    pixmap = QtGui.QPixmap(self.settings.input_dict[self.current_input])
+                except KeyError:
+                    pixmap = QtGui.QPixmap(self.settings.input_dict[1])
+
             self.label_image.setPixmap(pixmap)
 
     def volume_select(self, volume: int):
@@ -145,5 +154,9 @@ class Logic(QMainWindow, Ui_MainWindow):
             else:
                 self.current_channel = channel  # Direct selection of channel.
 
-            pixmap = QtGui.QPixmap(self.settings.channel_dict[self.current_channel])
+            # Exception handling in place if the key value does not exist in the dictionary.
+            try:
+                pixmap = QtGui.QPixmap(self.settings.channel_dict[self.current_channel])
+            except KeyError:
+                pixmap = QtGui.QPixmap(self.settings.channel_dict[1])
             self.label_image.setPixmap(pixmap)

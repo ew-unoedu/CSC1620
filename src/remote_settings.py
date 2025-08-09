@@ -6,7 +6,7 @@ import os.path
 
 class RemoteSettings:
     """
-    Class to construct RemoteSettings objects.
+    Class to construct RemoteSettings.
     """
     def __init__(self):
         # Declare and set initial variables.
