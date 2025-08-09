@@ -6,6 +6,7 @@ import os.path
 
 class RemoteSettings:
     """
+    Constructor
     Class to construct RemoteSettings.
     """
     def __init__(self):
@@ -23,6 +24,7 @@ class RemoteSettings:
     def remote_settings_on(self) -> dict:
         """
         Function to read settings file to update settings_dict attribute from RemoteSettings class object.
+        :return: Settings dictionary.
         """
         # Checks if there is an existing settings file and assigns key values, if none, initial dict is used.
         if os.path.isfile(self.settings_file):
@@ -39,6 +41,7 @@ class RemoteSettings:
     def remote_settings_off(self, settings: list):
         """
         Function to write from a list of settings when the remote is powered off.
+        :param settings: List of settings.
         """
         with open(self.settings_file, 'w', newline='') as output_csv_file:
             csv_file = csv.writer(output_csv_file, delimiter=',')

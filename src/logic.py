@@ -9,6 +9,7 @@ from remote_settings import *
 class Logic(QMainWindow, Ui_MainWindow):
     def __init__(self):
         """
+        Constructor
         Logic class to provide code logic for TV Remote operations.
         """
         super().__init__()
@@ -34,6 +35,7 @@ class Logic(QMainWindow, Ui_MainWindow):
         self.button_volup.clicked.connect(lambda: self.volume_select(volume=(self.volume + 1)))  # Increase volume.
         self.button_voldown.clicked.connect(lambda: self.volume_select(volume=(self.volume - 1)))  # Decrease volume.
 
+        # This allows the slider controls to update and set the volume level
         self.slider_volume.sliderPressed.connect(lambda: self.volume_select(volume=self.slider_volume.value()))
 
         self.button_chanup.clicked.connect(lambda: self.channel_select(self.current_channel + 1))  # Next channel.
@@ -89,6 +91,7 @@ class Logic(QMainWindow, Ui_MainWindow):
     def input(self, input_hdmi: int):
         """
         Input control function to toggle through HDMI inputs and TV input.
+        :param input_hdmi
         """
         if self.power_state:
             # Sets offset for input values after max input is reached.
@@ -113,6 +116,7 @@ class Logic(QMainWindow, Ui_MainWindow):
     def volume_select(self, volume: int):
         """
         Volume control function to mute, increase, or decrease volume
+        :param volume
         """
         '''
         Used the PyQT6 guide to find information for the set value of a slider although intuitive from
@@ -145,6 +149,7 @@ class Logic(QMainWindow, Ui_MainWindow):
     def channel_select(self, channel: int):
         """
         Channel control function to toggle through channels or direct select
+        :param channel
         """
         if self.power_state:
             if channel == 0:
